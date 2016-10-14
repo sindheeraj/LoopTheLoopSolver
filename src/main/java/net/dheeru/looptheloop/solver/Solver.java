@@ -1,7 +1,7 @@
 package net.dheeru.looptheloop.solver;
 
-import net.dheeru.looptheloop.solver.strategies.EliminatePossibility;
-import net.dheeru.looptheloop.solver.strategies.SetStrategy;
+import net.dheeru.looptheloop.solver.strategies.eliminate.EliminatePossibility;
+import net.dheeru.looptheloop.solver.strategies.set.SetStrategy;
 import net.dheeru.looptheloop.solver.strategies.Strategy;
 
 import javax.swing.JPanel;

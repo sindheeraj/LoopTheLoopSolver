@@ -1,4 +1,4 @@
-package net.dheeru.looptheloop.solver.strategies;
+package net.dheeru.looptheloop.solver.strategies.eliminate;
 
 import net.dheeru.looptheloop.solver.Board;
 import net.dheeru.looptheloop.solver.Line;
