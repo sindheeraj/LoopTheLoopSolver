@@ -7,6 +7,7 @@ import java.util.ArrayList;
  */
 public class Node {
   private final ArrayList<Line> possibilities = new ArrayList<>();
+  private final ArrayList<Line> lines = new ArrayList<>();
   private final int numLines;
 
   private Node(int numLines) {
@@ -31,5 +32,13 @@ public class Node {
 
   public ArrayList<Line> getPossibilities() {
     return possibilities;
+  }
+
+  public boolean addLines(Line line) {
+    if (lines.contains(line)) {
+      return false;
+    }
+    lines.add(line);
+    return false;
   }
 }

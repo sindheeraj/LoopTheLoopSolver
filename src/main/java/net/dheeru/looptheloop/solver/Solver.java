@@ -1,7 +1,10 @@
 package net.dheeru.looptheloop.solver;
 
-import javax.swing.JFrame;
+import net.dheeru.looptheloop.solver.strategies.EliminatePossibility;
+import net.dheeru.looptheloop.solver.strategies.Strategy;
+
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 import java.awt.BasicStroke;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -14,8 +17,18 @@ import java.util.ArrayList;
  * Main class for solving.
  */
 public class Solver extends javax.swing.JFrame {
-  Solver(Board board) {
-    initComponents(board);
+  private Solver(Board board) {
+    final EliminatePossibility[] eliminatePossibilityStrategies = Strategy.getEliminatePossibilityStrategies();
+    boolean changed = true;
+    while (changed) {
+      boolean changedThisRound = false;
+      for (EliminatePossibility eliminatePossibility : eliminatePossibilityStrategies) {
+        changedThisRound = eliminatePossibility.eliminate(board) || changedThisRound;
+      }
+
+      changed = changedThisRound;
+    }
+    drawAnswer(board);
   }
 
   public static void main(String args[]) throws Exception {
@@ -28,11 +41,11 @@ public class Solver extends javax.swing.JFrame {
     });
   }
 
-  private void initComponents(Board board) {
+  private void drawAnswer(Board board) {
     Panel2 jPanel2 = new Panel2(board);
     this.setContentPane(jPanel2);
     this.setSize(new Dimension(420, 420));
-    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
   }
 
   private static class Panel2 extends JPanel {
@@ -85,8 +98,8 @@ public class Solver extends javax.swing.JFrame {
                 break;
             }
             drawDashedLine(g, x1, y1, x2, y2);
-            g.drawString(nodes[i][j].getNumLines() + "", SPACE + SPACE * j + SPACE / 3, SPACE + SPACE * i + SPACE / 2);
           }
+          g.drawString(nodes[i][j].getNumLines() + "", SPACE + SPACE * j + SPACE / 3, SPACE + SPACE * i + SPACE / 2);
         }
       }
     }
