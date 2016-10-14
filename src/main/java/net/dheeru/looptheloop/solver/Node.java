@@ -34,11 +34,15 @@ public class Node {
     return possibilities;
   }
 
-  public boolean addLines(Line line) {
+  public boolean addLine(Line line) {
     if (lines.contains(line)) {
       return false;
     }
     lines.add(line);
     return false;
+  }
+
+  public ArrayList<Line> getLines() {
+    return lines;
   }
 }

@@ -12,4 +12,10 @@ public class Strategy {
         new ZeroEliminate(),
     };
   }
+
+  public static SetStrategy[] getSetStrategies() {
+    return new SetStrategy[] {
+        new PossibilitiesMatchNumLinesSetLines(),
+    };
+  }
 }

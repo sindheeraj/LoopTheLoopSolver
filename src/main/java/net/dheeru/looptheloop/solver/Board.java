@@ -79,4 +79,33 @@ public class Board {
 
     return removed;
   }
+
+  public boolean setLine(int i, int j, Line line) {
+    boolean added = false;
+    added = nodes[i][j].addLine(line) || added;
+    switch (line) {
+      case TOP:
+        if (i > 0) {
+          added = nodes[i - 1][j].addLine(Line.BOTTOM) || added;
+        }
+        break;
+      case RIGHT:
+        if (j < nodes[i].length - 1) {
+          added = nodes[i][j + 1].addLine(Line.LEFT) || added;
+        }
+        break;
+      case LEFT:
+        if (j > 0) {
+          added = nodes[i][j - 1].addLine(Line.RIGHT) || added;
+        }
+        break;
+      case BOTTOM:
+        if (i < nodes.length - 1) {
+          added = nodes[i + 1][j].addLine(Line.TOP) || added;
+        }
+        break;
+    }
+
+    return added;
+  }
 }

@@ -1,6 +1,7 @@
 package net.dheeru.looptheloop.solver;
 
 import net.dheeru.looptheloop.solver.strategies.EliminatePossibility;
+import net.dheeru.looptheloop.solver.strategies.SetStrategy;
 import net.dheeru.looptheloop.solver.strategies.Strategy;
 
 import javax.swing.JPanel;
@@ -19,11 +20,16 @@ import java.util.ArrayList;
 public class Solver extends javax.swing.JFrame {
   private Solver(Board board) {
     final EliminatePossibility[] eliminatePossibilityStrategies = Strategy.getEliminatePossibilityStrategies();
+    final SetStrategy[] setStrategies = Strategy.getSetStrategies();
     boolean changed = true;
     while (changed) {
       boolean changedThisRound = false;
       for (EliminatePossibility eliminatePossibility : eliminatePossibilityStrategies) {
         changedThisRound = eliminatePossibility.eliminate(board) || changedThisRound;
+      }
+
+      for (SetStrategy setStrategy : setStrategies) {
+        changedThisRound = setStrategy.set(board) || changedThisRound;
       }
 
       changed = changedThisRound;
@@ -65,7 +71,9 @@ public class Solver extends javax.swing.JFrame {
       final Node[][] nodes = board.getNodes();
       for (int i = 0; i < nodes.length; i++) {
         for (int j = 0; j < nodes[i].length; j++) {
+          final ArrayList<Line> lines = nodes[i][j].getLines();
           final ArrayList<Line> possibilities = nodes[i][j].getPossibilities();
+          possibilities.removeAll(lines);
           for (Line possibility : possibilities) {
             int x1 = 0;
             int x2 = 0;
@@ -99,6 +107,40 @@ public class Solver extends javax.swing.JFrame {
             }
             drawDashedLine(g, x1, y1, x2, y2);
           }
+
+          for (Line line : lines) {
+            int x1 = 0;
+            int x2 = 0;
+            int y1 = 0;
+            int y2 = 0;
+            switch (line) {
+              case TOP:
+                x1 = SPACE + j * SPACE;
+                x2 = SPACE + j * SPACE + SPACE;
+                y1 = SPACE * i + SPACE;
+                y2 = SPACE * i + SPACE;
+                break;
+              case BOTTOM:
+                x1 = SPACE + j * SPACE;
+                x2 = SPACE + j * SPACE + SPACE;
+                y1 = SPACE * i + SPACE + SPACE;
+                y2 = SPACE * i + SPACE + SPACE;
+                break;
+              case LEFT:
+                x1 = SPACE + j * SPACE;
+                x2 = SPACE + j * SPACE;
+                y1 = SPACE * i + SPACE;
+                y2 = SPACE * i + SPACE + SPACE;
+                break;
+              case RIGHT:
+                x1 = SPACE + j * SPACE + SPACE;
+                x2 = SPACE + j * SPACE + SPACE;
+                y1 = SPACE * i + SPACE;
+                y2 = SPACE * i + SPACE + SPACE;
+                break;
+            }
+            g.drawLine(x1, y1, x2, y2);
+          }
           g.drawString(nodes[i][j].getNumLines() + "", SPACE + SPACE * j + SPACE / 3, SPACE + SPACE * i + SPACE / 2);
         }
       }
@@ -106,11 +148,9 @@ public class Solver extends javax.swing.JFrame {
 
     public void drawDashedLine(Graphics g, int x1, int y1, int x2, int y2){
 
-      //creates a copy of the Graphics instance
       Graphics2D g2d = (Graphics2D) g.create();
 
-      //set the stroke of the copy, not the original
-      Stroke dashed = new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{1}, 0);
+      Stroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{2}, 1);
       g2d.setStroke(dashed);
       g2d.drawLine(x1, y1, x2, y2);
 
