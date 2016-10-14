@@ -45,4 +45,8 @@ public class Node {
   public ArrayList<Line> getLines() {
     return lines;
   }
+
+  public boolean hasPossibility(Line line) {
+    return possibilities.contains(line);
+  }
 }
