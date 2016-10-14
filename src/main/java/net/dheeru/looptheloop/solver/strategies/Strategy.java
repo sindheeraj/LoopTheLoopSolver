@@ -10,6 +10,7 @@ public class Strategy {
   public static EliminatePossibility[] getEliminatePossibilityStrategies() {
     return new EliminatePossibility[] {
         new ZeroEliminate(),
+        new CrossEliminate(),
     };
   }
 
